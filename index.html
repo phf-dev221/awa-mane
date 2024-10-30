@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ton Message Quotidien ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(45deg, #ffe6e6, #fff5f5);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        header {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #ff4d6d;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-style: italic;
+        }
+
+        .date-display {
+            font-size: 1.2em;
+            color: #666;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            height: 300px;
+            margin: 0 auto;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .card-front {
+            background: white;
+        }
+
+        .card-back {
+            background: #ff4d6d;
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .heart {
+            font-size: 3em;
+            margin: 20px;
+            animation: pulse 1.5s infinite;
+        }
+
+        .message {
+            font-size: 1.3em;
+            line-height: 1.6;
+        }
+
+        .next-message {
+            margin-top: 20px;
+            opacity: 0.7;
+            font-size: 0.9em;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        footer {
+            margin-top: 40px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Ton Message du Jour</h1>
+            <p class="subtitle">Un nouveau message chaque jour, rien que pour toi ✨</p>
+        </header>
+
+        <div class="date-display" id="currentDate"></div>
+        <div class="card" id="messageCard">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="heart">❤️</div>
+                    <p>Clique pour découvrir<br>ton message du jour</p>
+                </div>
+                <div class="card-back">
+                    <p class="message" id="dailyMessage"></p>
+                    <p class="next-message">Reviens demain pour un nouveau message 💝</p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Créé avec amour pour toi Awa MANE 💝</p>
+        </footer>
+    </div>
+
+    <script>
+        // Grande banque de messages
+        const messagesBank = [
+            // Messages doux
+            "Ton sourire illumine ma journée comme le plus beau des soleils ☀️",
+            "Chaque jour je remercie le destin de t'avoir mise sur mon chemin ✨",
+            "Ta présence dans ma vie est le plus beau des cadeaux 🎁",
+            "Tu as cette façon unique de rendre chaque moment spécial 💫",
+            "Ton rire est la plus belle mélodie à mes oreilles 🎵",
+            
+            // Compliments sur sa personnalité
+            "Ta force de caractère m'impressionne chaque jour 💪",
+            "Ton intelligence et ta créativité sont inspirantes ⭐",
+            "Ta bienveillance envers les autres est admirable 🌟",
+            "J'admire ta détermination dans tout ce que tu entreprends 🎯",
+            "Ta joie de vivre est contagieuse 🌈",
+            
+            // Messages poétiques
+            "Tu es comme un rayon de soleil qui perce les nuages ⛅",
+            "Ta beauté intérieure rayonne comme les étoiles dans la nuit 🌠",
+            "Tu es aussi rafraîchissante qu'une brise d'été 🌸",
+            "Ton âme est aussi pure que la rosée du matin 💎",
+            "Tu es aussi précieuse que la première fleur du printemps 🌺",
+            
+            // Messages d'encouragement
+            "Tu es capable de réaliser tous tes rêves 🌈",
+            "Ta persévérance te mènera loin dans la vie ⭐",
+            "Continue de briller, tu es extraordinaire ✨",
+            "Ton potentiel est infini 🌟",
+            "Tu as le pouvoir de rendre ce monde meilleur 🌍",
+            
+            // Messages sur votre relation
+            "Chaque moment passé avec toi est un trésor 💝",
+            "Tu rends ma vie plus belle jour après jour 🌸",
+            "Ta présence égaye tous mes instants ☀️",
+            "Je souris rien qu'en pensant à toi 😊",
+            "Tu as une place spéciale dans mon cœur ❤️"
+        ];
+
+        function getCurrentDateString() {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date().toLocaleDateString('fr-FR', options);
+        }
+
+        function getMessageForToday() {
+            // Utilise la date du jour comme seed pour la sélection du message
+            const today = new Date();
+            const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+            const index = seed % messagesBank.length;
+            return messagesBank[index];
+        }
+
+        function initializeCard() {
+            document.getElementById('currentDate').textContent = getCurrentDateString();
+            document.getElementById('dailyMessage').textContent = getMessageForToday();
+            
+            const card = document.getElementById('messageCard');
+            card.onclick = function() {
+                this.classList.toggle('flipped');
+            };
+        }
+
+        // Initialize on load
+        initializeCard();
+    </script>
+</body>
+</html>

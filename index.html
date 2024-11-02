@@ -1,275 +1,147 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Ton Message Quotidien ❤️</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Page Non Trouvée</title>
+  <link rel="stylesheet" href="style.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* CSS Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(45deg, #ffe6e6, #fff5f5);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #4b79a1, #283e51);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: #fff;
+  overflow: hidden;
+}
 
-        .container {
-            max-width: 800px;
-            width: 100%;
-            text-align: center;
-        }
+.container {
+  text-align: center;
+}
 
-        header {
-            margin-bottom: 40px;
-            padding: 20px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
+.error h1 {
+  font-size: 8rem;
+  animation: glow 2s ease-in-out infinite alternate;
+}
 
-        h1 {
-            color: #ff4d6d;
-            margin-bottom: 10px;
-        }
+.error p {
+  font-size: 1.5rem;
+  margin: 20px 0;
+}
 
-        .subtitle {
-            color: #666;
-            font-style: italic;
-        }
+.home-link {
+  text-decoration: none;
+  font-size: 1rem;
+  color: #4b79a1;
+  background-color: #fff;
+  padding: 10px 20px;
+  border-radius: 25px;
+  transition: 0.3s;
+}
 
-        .date-display {
-            font-size: 1.2em;
-            color: #666;
-            margin: 20px 0;
-        }
+.home-link:hover {
+  background-color: #4b79a1;
+  color: #fff;
+  box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.6);
+}
 
-        .card {
-            background: white;
-            width: 100%;
-            max-width: 500px;
-            height: 300px;
-            margin: 0 auto;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            position: relative;
-            perspective: 1000px;
-            cursor: pointer;
-        }
+.planet {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 50px auto;
+  background: #fff;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2);
+  animation: rotate 6s linear infinite;
+}
 
-        .card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.8s;
-            transform-style: preserve-3d;
-        }
+.ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 220px;
+  height: 30px;
+  margin-top: -15px;
+  margin-left: -110px;
+  border: 5px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  animation: spin 6s linear infinite;
+}
 
-        .card.flipped .card-inner {
-            transform: rotateY(180deg);
-        }
+.cover-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150px;
+  height: 30px;
+  margin-top: -15px;
+  margin-left: -75px;
+  background: #4b79a1;
+  border-radius: 50%;
+}
 
-        .card-front,
-        .card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            padding: 30px;
-            border-radius: 15px;
-        }
+.spots {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, #4b79a1, #283e51);
+  opacity: 0.4;
+  border-radius: 50%;
+  animation: rotateSpots 6s linear infinite;
+}
 
-        .card-front {
-            background: white;
-        }
+/* Animations */
+@keyframes glow {
+  from {
+    text-shadow: 0px 0px 20px #4b79a1, 0px 0px 30px #4b79a1, 0px 0px 40px #4b79a1;
+  }
+  to {
+    text-shadow: 0px 0px 30px #ffffff, 0px 0px 60px #4b79a1, 0px 0px 80px #ffffff;
+  }
+}
 
-        .card-back {
-            background: #ff4d6d;
-            color: white;
-            transform: rotateY(180deg);
-        }
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 
-        .heart {
-            font-size: 3em;
-            margin: 20px;
-            animation: pulse 1.5s infinite;
-        }
+@keyframes rotateSpots {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}
 
-        .message {
-            font-size: 1.3em;
-            line-height: 1.6;
-        }
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 
-        .next-message {
-            margin-top: 20px;
-            opacity: 0.7;
-            font-size: 0.9em;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.1);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        footer {
-            margin-top: 40px;
-            color: #666;
-        }
     </style>
 </head>
-
 <body>
-    <div class="container">
-        <header>
-            <h1>Ton Message du Jour</h1>
-            <p class="subtitle">Un nouveau message chaque jour, rien que pour toi ✨</p>
-        </header>
-
-        <div class="date-display" id="currentDate"></div>
-        <div class="card" id="messageCard">
-            <div class="card-inner">
-                <div class="card-front">
-                    <div class="heart">❤️</div>
-                    <p>Clique pour découvrir<br>ton message du jour</p>
-                </div>
-                <div class="card-back">
-                    <p class="message" id="dailyMessage"></p>
-                    <p class="next-message">Reviens demain pour un nouveau message 💝</p>
-                </div>
-            </div>
-        </div>
-
-        <footer>
-            <p>Créé avec amour pour toi Awa MANE 💝</p>
-        </footer>
+  <div class="container">
+    <div class="error">
+      <h1>404</h1>
+      <p>Oops! La page que vous cherchez n'existe pas.</p>
+      <a href="/" class="home-link">Retour à l'accueil</a>
     </div>
-
-    <script>
-        // Grande banque de messages
-        const messagesBank = {
-            // Messages doux
-            doux: [
-                "Ton sourire illumine ma journée comme le plus beau des soleils ☀️",
-                "Chaque jour je remercie le destin de t'avoir mise sur mon chemin ✨",
-                "Ta présence dans ma vie est le plus beau des cadeaux 🎁",
-                "Tu as cette façon unique de rendre chaque moment spécial 💫",
-                "Ton rire est la plus belle mélodie à mes oreilles 🎵",
-                "Tes yeux brillent comme des étoiles, et j’y vois tout un univers 🌌",
-                "Être à tes côtés me donne l'impression que tout est possible 🌈",
-                "Rien n’égale la douceur de tes paroles quand tu es près de moi 🌹",
-                "Ton amour est une lumière dans mon cœur qui ne s’éteint jamais 🕯️",
-                "Chaque minute sans toi me semble une éternité, car tu es ma joie 💖",
-            ],
-            personnalite: [
-                // Compliments sur sa personnalité
-                "Ta force de caractère m'impressionne chaque jour 💪",
-                "Ton intelligence et ta créativité sont inspirantes ⭐",
-                "Si être génial était une compétition, tu aurais déjà triché pour gagner ! 😊",
-                "Chaque fois que tu parles, mes zygomatiques te disent merci ! 😁",
-                "J'admire ta détermination dans tout ce que tu entreprends 🎯",
-                "Ton courage face aux défis est une leçon pour moi chaque jour 🛤️",
-                "Ta douceur et ton écoute font de toi une personne exceptionnelle 🎐",
-                "Ton sens de l'humour me fait rire aux éclats même dans mes pires journées 😂",
-                "Tu as une manière de voir la vie qui me fait grandir 🌱",
-                "Ta bienveillance et ton authenticité sont inestimables 💫",
-            ],
-            poetique: [
-                // Messages poétiques
-                "Tu es comme un rayon de soleil qui perce les nuages ⛅",
-                "Ta beauté intérieure rayonne comme les étoiles dans la nuit 🌠",
-                "Tu es aussi rafraîchissante qu'une brise d'été 🌸",
-                "Ton âme est aussi pure que la rosée du matin 💎",
-                "Tu es aussi précieuse que la première fleur du printemps 🌺",
-                "À tes côtés, mon cœur est un oiseau qui s'envole vers le ciel 🌅",
-                "Ta voix est comme une berceuse qui apaise mes pensées 🌙",
-                "Ton amour est un phare qui guide mon âme dans la tempête 🕊️",
-                "Te voir, c'est comme voir une aurore boréale dans le désert 🌌",
-                "À travers toi, je découvre une poésie que je croyais avoir oubliée ✍️",
-            ],
-            encouragement: [
-                // Messages d'encouragement
-                "Tu es capable de réaliser tous tes rêves 🌈",
-                "Ta persévérance te mènera loin dans la vie ⭐",
-                "Continue de briller, tu es extraordinaire ✨",
-                "Ton potentiel est infini 🌟",
-                "Tu as le pouvoir de rendre ce monde meilleur 🌍",
-                "Ne sous-estime jamais ta capacité à accomplir des miracles 🦋",
-                "Chaque échec est une leçon, et tu es une élève brillante 🎓",
-                "Crois en toi autant que moi je crois en toi 💪",
-                "Peu importe le chemin, tu trouveras toujours ta voie 🌌",
-                "Tu es plus fort(e) que les tempêtes et plus lumineux(se) que l’aube ☀️",
-            ],
-            relation: [
-                // Messages sur votre relation
-                "Chaque moment passé avec toi est un trésor 💝",
-                "Tu rends ma vie plus belle jour après jour 🌸",
-                "Ta présence égaye tous mes instants ☀️",
-                "Je souris rien qu'en pensant à toi 😊",
-                "Tu as une place spéciale dans mon cœur ❤️",
-                "Avec toi, chaque jour est une aventure pleine de tendresse 🛤️",
-                "Ton amour est mon refuge et mon plus grand bonheur 🏡",
-                "Ensemble, nous construisons des souvenirs que je chéris chaque jour 🌠",
-                "Tu es mon point d’ancrage dans cet océan qu’est la vie ⚓",
-                "J’aime découvrir le monde à travers tes yeux, si beaux et profonds 🌍",
-            ]
-        };
-
-        function getCurrentDateString() {
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date().toLocaleDateString('fr-FR', options);
-}
-
-function getMessageForToday() {
-    // Liste des sections (les clés de `messagesBank`)
-    const categories = Object.keys(messagesBank);
-    const today = new Date();
-    
-    // Utilise le jour de l'année pour alterner entre les catégories
-    const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 86400000);
-    const categoryIndex = dayOfYear % categories.length;
-    const selectedCategory = categories[categoryIndex];
-    
-    // Choisit un message aléatoire dans la catégorie sélectionnée
-    const messages = messagesBank[selectedCategory];
-    const messageIndex = today.getDate() % messages.length;
-    return messages[messageIndex];
-}
-
-function initializeCard() {
-    document.getElementById('currentDate').textContent = getCurrentDateString();
-    document.getElementById('dailyMessage').textContent = getMessageForToday();
-    
-    const card = document.getElementById('messageCard');
-    card.onclick = function() {
-        this.classList.toggle('flipped');
-    };
-}
-
-// Initialize on load
-initializeCard();
-    </script>
+    <div class="planet">
+      <div class="ring"></div>
+      <div class="cover-ring"></div>
+      <div class="spots"></div>
+    </div>
+  </div>
 </body>
-
 </html>

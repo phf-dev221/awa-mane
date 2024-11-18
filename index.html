@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Ton Message Quotidien ❤️</title>
+    <style>
+        /* Styles existants... */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(45deg, #ffe6e6, #fff5f5);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        header {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #ff4d6d;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-style: italic;
+        }
+
+        .date-display {
+            font-size: 1.2em;
+            color: #666;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            height: 300px;
+            margin: 0 auto;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .card-front {
+            background: white;
+        }
+
+        .card-back {
+            background: #ff4d6d;
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .heart {
+            font-size: 3em;
+            margin: 20px;
+            animation: pulse 1.5s infinite;
+        }
+
+        .message {
+            font-size: 1.3em;
+            line-height: 1.6;
+        }
+
+        .next-message {
+            margin-top: 20px;
+            opacity: 0.7;
+            font-size: 0.9em;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        footer {
+            margin-top: 40px;
+            color: #666;
+        }
+
+        /* Ajout des styles pour l'image */
+        .discover-text {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 15px 20px;
+    border-radius: 10px;
+    font-weight: 500;
+    color: #333;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+}
+        .card-front,
+.card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 30px;
+    border-radius: 15px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden; /* Pour s'assurer que l'overlay ne déborde pas */
+}
+
+.card-front::before,
+.card-back::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.4); /* Overlay plus transparent pour le front */
+    z-index: 1;
+}
+
+.card-back::before {
+    background: rgba(255, 77, 109, 0.85); /* Overlay rosé plus transparent pour le back */
+}
+
+/* Modification pour que le contenu soit au-dessus de l'overlay */
+.content-wrapper {
+    position: relative;
+    z-index: 2; /* Place le contenu au-dessus de l'overlay */
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Styles pour le texte et les icônes */
+.heart {
+    font-size: 3em;
+    margin: 20px;
+    animation: pulse 1.5s infinite;
+    position: relative;
+    z-index: 2;
+}
+
+.message {
+    font-size: 1.3em;
+    line-height: 1.6;
+    position: relative;
+    z-index: 2;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Légère ombre pour meilleure lisibilité */
+}
+
+.next-message {
+    margin-top: 20px;
+    opacity: 0.9; /* Augmenté pour meilleure lisibilité */
+    font-size: 0.9em;
+    position: relative;
+    z-index: 2;
+}
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Ton Message du Jour</h1>
+            <p class="subtitle">Un nouveau message chaque jour, rien que pour toi ✨</p>
+        </header>
+
+        <div class="date-display" id="currentDate"></div>
+        <div class="card" id="messageCard">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="heart">❤️</div>
+                    <p class="discover-text">Clique pour découvrir<br>ton message du jour</p>
+                </div>
+                <div class="card-back">
+                    <p class="message" id="dailyMessage"></p>
+                    <p class="next-message">Reviens demain pour un nouveau message 💝</p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Créé avec amour pour toi Awa MANE 💔</p>
+        </footer>
+    </div>
+
+    <script>
+        // Grande banque de messages
+        const messagesBank = {
+    // Messages doux, empreints de tristesse
+    doux: [
+        "Ton sourire me manque, il éclairait mes jours les plus sombres 🌅",
+        "Je chéris encore les instants où tu as illuminé ma vie ✨",
+        "Ta présence était un cadeau que je n’ai jamais cessé d’apprécier 🎁",
+        "Il y avait une magie dans nos moments, une magie que je regrette 💫",
+        "Ton rire résonne encore dans mes pensées, comme un doux écho 🎵",
+        "Tes yeux me rappelaient un univers que je n’atteindrai plus 🌌",
+        "Avec toi, je me sentais invincible, mais ce sentiment me quitte 🌈",
+        "La douceur de tes paroles me manque cruellement 🌹",
+        "Ta lumière dans mon cœur vacille mais refuse de s’éteindre 🕯️",
+        "Chaque minute sans toi est une éternité empreinte de solitude 💖",
+    ],
+    personnalite: [
+        // Compliments avec une touche de regret
+        "Ta force de caractère m’a toujours inspiré, et elle me manque 💪",
+        "Ton intelligence et ta créativité me rappellent ce que j’ai perdu ⭐",
+        "Être géniale est ta nature, et je regrette de ne plus en être témoin 😊",
+        "Tu avais cette manière unique de me faire sourire, même de loin 😢",
+        "Ta détermination était contagieuse, elle me poussait à être meilleur 🎯",
+        "Ton courage m’a toujours impressionné, et il laisse un vide 🛤️",
+        "Ta douceur et ton écoute étaient une ancre dans mes jours troubles 🎐",
+        "Ton humour me manque, il illuminait mes journées grises 😂",
+        "Ton regard sur la vie m’apportait une clarté que je peine à retrouver 🌱",
+        "Ta bienveillance était un trésor dont je ressens désormais l'absence 💫",
+    ],
+    poetique: [
+        // Messages poétiques empreints de mélancolie
+        "Tu étais ce rayon de soleil dans un ciel parfois trop nuageux ⛅",
+        "Ton éclat intérieur brillait comme une étoile qu'on ne peut oublier 🌠",
+        "Tu étais cette brise d’été qui apaisait les tourments de mon âme 🌸",
+        "Ton âme avait une pureté que je cherche encore dans mes rêves 💎",
+        "Tu étais la première fleur du printemps, celle qu'on ne veut pas voir faner 🌺",
+        "Près de toi, mon cœur s'envolait, mais aujourd'hui il est lourd 🌅",
+        "Ta voix, douce et apaisante, hante encore mes nuits 🌙",
+        "Ton amour était un phare qui me guidait, et sans lui je suis perdu 🕊️",
+        "Te voir était comme contempler une aurore boréale, magique mais éphémère 🌌",
+        "À travers toi, j’ai découvert une poésie qui me laisse maintenant silencieux ✍️",
+    ],
+    encouragement: [
+        // Messages d'encouragement avec une nuance de regret
+        "Tu as et auras toujours la force de réaliser tes rêves, même si je n’en fais pas partie 🌈",
+        "Je sais que ta persévérance t’ouvrira les portes que tu mérites ⭐",
+        "Continue de briller, même si je ne suis plus là pour te voir ✨",
+        "Ton potentiel est sans limite, et je n’ai jamais douté de toi 🌟",
+        "Tu peux rendre ce monde meilleur, comme tu as embelli le mien 🌍",
+        "Chaque épreuve renforce ton caractère, et je le sais mieux que quiconque 🦋",
+        "Crois en toi comme je l’ai toujours fait, même de loin 💪",
+        "Tu es plus forte que tu ne le penses, et je regrette de ne plus être ton soutien ☀️",
+        "Peu importe les chemins que tu emprunteras, je sais que tu réussiras 🌌",
+    ],
+    relation: [
+        // Messages sur la relation, teintés de nostalgie
+        "Chaque moment passé avec toi est un trésor que je garde précieusement 💝",
+        "Tu as embelli ma vie d’une manière que je ne pourrai jamais oublier 🌸",
+        "Ta présence avait le pouvoir d'égayer mes jours les plus sombres ☀️",
+        "Je souris encore, mais cette fois à des souvenirs qui me serrent le cœur 😊",
+        "Tu occupes une place dans mon cœur, même si elle reste désormais vide ❤️",
+        "Avec toi, chaque jour était une aventure que je regrette d’avoir perdue 🛤️",
+        "Ton amour était mon refuge, et maintenant je me sens à la dérive 🏡",
+        "Nos souvenirs ensemble sont gravés, même s’ils me rendent mélancolique 🌠",
+        "Tu étais mon ancrage dans cet océan qu’est la vie, et je ressens ton absence ⚓",
+        "Découvrir le monde à travers tes yeux était un privilège que je chéris encore 🌍",
+    ]
+};
+
+
+        const imagesBank = {
+            doux: [
+                'assets/img1.jpg',
+                'assets/img2.MP4',
+                'assets/img3.JPG',
+                'assets/img4.JPG',
+                'assets/img5.JPG'
+            ],
+            personnalite: [
+                'assets/img6.jpg',
+                'assets/img7.MP4',
+                'assets/img8.heic',
+                'assets/img9.heic',
+                'assets/img10.JPG'
+            ],
+            poetique: [
+                'assets/img11.jpg',
+                'assets/img12.jpg',
+                'assets/img1.jpg',
+                'assets/img2.MP4',
+                'assets/img3.JPG'
+            ],
+            encouragement: [
+                'assets/img3.JPG',
+                'assets/img4.JPG',
+                'assets/img5.JPG',
+                'assets/img6.jpg',
+                'assets/img7.MP4'
+            ],
+            relation: [
+                'assets/img1.jpg',
+                'assets/img2.MP4',
+                'assets/img3.JPG',
+                'assets/img4.JPG',
+                'assets/img5.JPG'
+            ]
+        };
+
+        function getCurrentDateString() {
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date().toLocaleDateString('fr-FR', options);
+}
+
+function getMessageForToday() {
+    // Liste des sections (les clés de `messagesBank`)
+    const categories = Object.keys(messagesBank);
+    const today = new Date();
+    
+    // Utilise le jour de l'année pour alterner entre les catégories
+    const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 86400000);
+    const categoryIndex = dayOfYear % categories.length;
+    const selectedCategory = categories[categoryIndex];
+    
+    // Choisit un message aléatoire dans la catégorie sélectionnée
+    const messages = messagesBank[selectedCategory];
+    const messageIndex = today.getDate() % messages.length;
+    return messages[messageIndex];
+}
+
+
+// Initialize on load
+initializeCard();
+
+//------------------------
+
+        function getImageForToday(category) {
+            const images = imagesBank[category];
+            const today = new Date();
+            const imageIndex = today.getDate() % images.length;
+            return images[imageIndex];
+        }
+
+        function initializeCard() {
+            document.getElementById('currentDate').textContent = getCurrentDateString();
+            
+            // Sélection de la catégorie du jour
+            const today = new Date();
+            const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 86400000);
+            const categories = Object.keys(messagesBank);
+            const categoryIndex = dayOfYear % categories.length;
+            const selectedCategory = categories[categoryIndex];
+            
+            // Sélection du message et de l'image
+            const messages = messagesBank[selectedCategory];
+            const messageIndex = today.getDate() % messages.length;
+            const message = messages[messageIndex];
+            const image = getImageForToday(selectedCategory);
+            
+            // Application du message et de l'image
+            document.getElementById('dailyMessage').textContent = message;
+            
+            // Application de l'image comme arrière-plan
+            const cardFront = document.querySelector('.card-front');
+            const cardBack = document.querySelector('.card-back');
+            
+            cardFront.style.backgroundImage = `url(${image})`;
+            cardBack.style.backgroundImage = `url(${image})`;
+            
+            // Ajout des divs avec overlay pour une meilleure lisibilité
+            const frontContent = cardFront.innerHTML;
+            const backContent = cardBack.innerHTML;
+            
+            cardFront.innerHTML = `<div class="content-overlay">${frontContent}</div>`;
+            cardBack.innerHTML = `<div class="content-overlay">${backContent}</div>`;
+            
+            const card = document.getElementById('messageCard');
+            card.onclick = function() {
+                this.classList.toggle('flipped');
+            };
+        }
+
+        // Initialize on load
+        initializeCard();
+
+</script>
+</body>
+
+</html>
